@@ -1,14 +1,25 @@
 import sys
 import re
 
+from zope.interface import Interface
 from zope.interface.interfaces import IInterface
-from zope.component import queryUtility
+from zope.component import queryUtility, adapter
 
 from ZPublisher.Iterators import IStreamIterator
 from ZPublisher.HTTPResponse import default_encoding
 
 from plone.transformchain.interfaces import ITransformer
 
+from ZPublisher.interfaces import IPubBeforeCommit
+
+try:
+    from ZPublisher.interfaces import IPubBeforeAbort
+except ImportError:
+    # old Zope 2.12 or old ZPublisherBackport - this interface won't be
+    # used, most likely, so the effect is that error messages aren't styled.
+    class IPubBeforeAbort(Interface):
+        pass
+    
 CHARSET_RE = re.compile(r'(?:application|text)/[-+0-9a-z]+\s*;\scharset=([-_0-9a-z]+)(?:(?:\s*;)|\Z)', re.IGNORECASE)
 
 def extractEncoding(response):
@@ -68,11 +79,13 @@ def applyTransform(request, body=None):
             else:
                 request.response.setBody(''.join(transformed))
 
+@adapter(IPubBeforeCommit)
 def applyTransformOnSuccess(event):
     """Apply the transform after a successful request
     """
     applyTransform(event.request)
 
+@adapter(IPubBeforeAbort)
 def applyTransformOnFailure(event):
     """Apply the transform to the error html output
     """
