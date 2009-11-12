@@ -23,12 +23,15 @@ setup(name='plone.transformchain',
       namespace_packages=['plone'],
       include_package_data=True,
       zip_safe=False,
+      extras_require={
+        'repoze': ['repoze.zope2'],
+        'Zope2.10': ['ZPublisherEventsBackport'],
+      },
       install_requires=[
           'setuptools',
           'zope.interface',
           'zope.component',
           'zope.schema',
-          'repoze.zope2',
       ],
       entry_points="""
       """,

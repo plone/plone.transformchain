@@ -1,7 +1,24 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
+    xmlns:zcml="http://namespaces.zope.org/zcml"
     i18n_domain="plone.transformchain">
 
-    <utility factory=".handler.Transformer" />
+    <!-- Default transformation utility which delegates to ITransform adapters -->
+    <utility
+        factory=".transformer.Transformer"
+        />
+
+    <!-- Hooks for ZPublisher -->
+    <subscriber
+        zcml:condition="installed ZPublisher.interfaces.IPubBeforeCommit"
+        for="ZPublisher.interfaces.IPubBeforeCommit"
+        handler=".zpublisher.applyTransformOnSuccess"
+        />
+    
+    <subscriber
+        zcml:condition="installed ZPublisher.interfaces.IPubBeforeAbort"
+        for="ZPublisher.interfaces.IPubBeforeAbort"
+        handler=".zpublisher.applyTransformOnFailure"
+        />
 
 </configure>
