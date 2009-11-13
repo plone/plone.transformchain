@@ -50,7 +50,7 @@ def applyTransform(request, body=None):
     """
     
     if isEvilWebDAVRequest(request):
-        return
+        return None
     
     transformer = queryUtility(ITransformer)
     if transformer is not None:
@@ -66,24 +66,29 @@ def applyTransform(request, body=None):
         
         transformed = transformer(request, result, encoding)
         if transformed is not None and transformed is not result:
-            
-            # horrid check to deal with Plone 3/Zope 2.10, where this is still an old-style interface
-            if ((IInterface.providedBy(IStreamIterator)     and IStreamIterator.providedBy(transformed))
-             or (not IInterface.providedBy(IStreamIterator) and IStreamIterator.isImplementedBy(transformed))
-            ):
-                request.response.setBody(transformed)
-            # setBody() can deal with byte and unicode strings (and will encode as necessary)...
-            elif isinstance(transformed, basestring):
-                request.response.setBody(transformed)
-            # ... but not with iterables
-            else:
-                request.response.setBody(''.join(transformed))
+            return transformed
+    
+    return None
 
 @adapter(IPubBeforeCommit)
 def applyTransformOnSuccess(event):
     """Apply the transform after a successful request
     """
-    applyTransform(event.request)
+    transformed = applyTransform(event.request)
+    if transformed is not None:
+        response = event.request.response
+        
+        # horrid check to deal with Plone 3/Zope 2.10, where this is still an old-style interface
+        if ((IInterface.providedBy(IStreamIterator)     and IStreamIterator.providedBy(transformed))
+         or (not IInterface.providedBy(IStreamIterator) and IStreamIterator.isImplementedBy(transformed))
+        ):
+            response.setBody(transformed)
+        # setBody() can deal with byte and unicode strings (and will encode as necessary)...
+        elif isinstance(transformed, basestring):
+            response.setBody(transformed)
+        # ... but not with iterables
+        else:
+            response.setBody(''.join(transformed))
 
 @adapter(IPubBeforeAbort)
 def applyTransformOnFailure(event):
@@ -93,10 +98,14 @@ def applyTransformOnFailure(event):
         request = event.request
         exc_info = sys.exc_info()
         error = exc_info[1]
-        if isinstance(error, basestring): # Plone 3.x / Zope 2.10
-            newBody = applyTransform(request, error)
-            if newBody is not None:
+        if isinstance(error, basestring): # Zope 2.10 - the exception is rendered (eeeeek)
+            transformed = applyTransform(request, error)
+            if transformed is not None:
+                
+                if not isinstance(transformed, basestring):
+                    transformed = ''.join(transformed)
+                
                 # If it's any consolation, Laurence felt quite dirty doing this...
-                raise exc_info[0], newBody, exc_info[2]
-        else: # plone 4
-            applyTransform(request)
+                raise exc_info[0], transformed, exc_info[2]
+        else: # Zope 2.12 - we are allowed to call setBody()
+            applyTransformOnSuccess(event)

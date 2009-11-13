@@ -3,9 +3,9 @@
     xmlns:zcml="http://namespaces.zope.org/zcml"
     i18n_domain="plone.transformchain">
 
-    <!-- For Zope 2.10, we need to configure backports -->
+    <!-- For Zope 2.10, we need to backport the relevant events -->
     <include
-        zcml:condition="not-installed ZPublisher.interfaces"
+        zcml:installed="ZPublisherEventsBackport"
         package="ZPublisherEventsBackport"
         />
 

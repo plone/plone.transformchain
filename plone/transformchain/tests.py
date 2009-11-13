@@ -2,16 +2,28 @@ import unittest
 import os
 import tempfile
 
+# Load patch for Zope 2.10
+try:
+    from ZPublisher import interfaces
+except ImportError:
+    import ZPublisherEventsBackport
+
+
 from zope.interface import Interface, implements, alsoProvides
 from zope.component import adapts, provideAdapter, provideUtility
 from zope.app.testing.placelesssetup import PlacelessSetup
 
 from plone.transformchain.interfaces import ITransform, ITransformer
 from plone.transformchain.transformer import Transformer
-from plone.transformchain.zpublisher import applyTransform
+from plone.transformchain.zpublisher import applyTransformOnSuccess
 
 from ZPublisher.HTTPResponse import default_encoding
 from ZPublisher.Iterators import filestream_iterator
+
+class FauxPubEvent(object):
+    
+    def __init__(self, request):
+        self.request = request
 
 class IRequestMarker(Interface):
     pass
@@ -596,7 +608,7 @@ class TestZPublisherTransforms(unittest.TestCase, PlacelessSetup):
         published = FauxPublished()
         request = FauxRequest(published)
         request['WEBDAV_SOURCE_PORT'] = '8081'
-        applyTransform(request)
+        applyTransformOnSuccess(FauxPubEvent(request))
 
     def test_applyTransform_webdav_method(self):
         class DoNotCallTransformer(object):
@@ -611,7 +623,7 @@ class TestZPublisherTransforms(unittest.TestCase, PlacelessSetup):
         published = FauxPublished()
         request = FauxRequest(published)
         request['REQUEST_METHOD'] = 'PUT'
-        applyTransform(request)
+        applyTransformOnSuccess(FauxPubEvent(request))
 
     def test_applyTransform_webdav_pathinfo(self):
         class DoNotCallTransformer(object):
@@ -626,12 +638,12 @@ class TestZPublisherTransforms(unittest.TestCase, PlacelessSetup):
         published = FauxPublished()
         request = FauxRequest(published)
         request['PATH_INFO'] = '/foo/bar/manage_DAVget'
-        applyTransform(request)
+        applyTransformOnSuccess(FauxPubEvent(request))
     
     def test_applyTransform_no_utility(self):
         published = FauxPublished()
         request = FauxRequest(published)
-        applyTransform(request)
+        applyTransformOnSuccess(FauxPubEvent(request))
 
     def test_applyTransform_default_encoding(self):
         class EncodingCaptureTransformer(object):
@@ -645,7 +657,7 @@ class TestZPublisherTransforms(unittest.TestCase, PlacelessSetup):
         
         published = FauxPublished()
         request = FauxRequest(published)
-        applyTransform(request)
+        applyTransformOnSuccess(FauxPubEvent(request))
         
         self.assertEquals(default_encoding, transformer.encoding)
     
@@ -662,7 +674,7 @@ class TestZPublisherTransforms(unittest.TestCase, PlacelessSetup):
         published = FauxPublished()
         request = FauxRequest(published)
         request.response.headers['content-type'] = 'text/html; charset=dummy'
-        applyTransform(request)
+        applyTransformOnSuccess(FauxPubEvent(request))
         
         self.assertEquals("dummy", transformer.encoding)
 
@@ -677,7 +689,7 @@ class TestZPublisherTransforms(unittest.TestCase, PlacelessSetup):
         
         published = FauxPublished()
         request = FauxRequest(published)
-        applyTransform(request)
+        applyTransformOnSuccess(FauxPubEvent(request))
         
         self.assertEquals('dummystr', request.response.getBody())
 
@@ -692,7 +704,7 @@ class TestZPublisherTransforms(unittest.TestCase, PlacelessSetup):
         
         published = FauxPublished()
         request = FauxRequest(published)
-        applyTransform(request)
+        applyTransformOnSuccess(FauxPubEvent(request))
         
         # note: the real setBody would encode here
         self.assertEquals(u'dummystr', request.response.getBody())
@@ -708,7 +720,7 @@ class TestZPublisherTransforms(unittest.TestCase, PlacelessSetup):
         
         published = FauxPublished()
         request = FauxRequest(published)
-        applyTransform(request)
+        applyTransformOnSuccess(FauxPubEvent(request))
         
         self.assertEquals('iterone', request.response.getBody())
 
@@ -730,7 +742,7 @@ class TestZPublisherTransforms(unittest.TestCase, PlacelessSetup):
         
             published = FauxPublished()
             request = FauxRequest(published)
-            applyTransform(request)
+            applyTransformOnSuccess(FauxPubEvent(request))
         
             self.failUnless(isinstance(request.response.getBody(), filestream_iterator,))
         finally:
