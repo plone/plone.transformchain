@@ -47,6 +47,7 @@ class FauxRequest(dict):
     def __init__(self, published, response=FauxResponse('<html/>')):
         self['PUBLISHED'] = published
         self.response = response
+        self.environ = {}
 
 class FauxPublished(object):
     pass
@@ -90,6 +91,39 @@ class TestTransformChain(unittest.TestCase, PlacelessSetup):
         
         new_result = self.t(request, result, encoding)
         self.assertEquals("Blah transformed", new_result)
+    
+    def test_off_switch(self):
+        
+        class Transform1(object):
+            implements(ITransform)
+            adapts(Interface, Interface)
+            
+            order = 0
+            
+            def __init__(self, published, request):
+                self.published = published
+                self.request = request
+            
+            def transformBytes(self, result, encoding):
+                return result + " transformed"
+                
+            def transformUnicode(self, result, encoding):
+                return result + u" transformed"
+            
+            def transformIterable(self, result, encoding):
+                return ''.join(result) + ' transformed'
+        
+        provideAdapter(Transform1, name=u"test.one")
+        
+        published = FauxPublished()
+        request = FauxRequest(published)
+        request.environ['plone.transformchain.disable'] = True
+        
+        result = ["Blah"]
+        encoding = 'utf-8'
+        
+        new_result = self.t(request, result, encoding)
+        self.assertEquals(None, new_result)
     
     def test_transform_string(self):
         

@@ -4,6 +4,8 @@ from zope.interface import implements
 from zope.component import getAdapters
 
 from plone.transformchain.interfaces import ITransform, ITransformer
+from plone.transformchain.interfaces import DISABLE_TRANSFORM_REQUEST_KEY
+
 from ZODB.POSException import ConflictError
 
 def sort_key(a, b):
@@ -19,6 +21,11 @@ class Transformer(object):
     implements(ITransformer)
     
     def __call__(self, request, result, encoding):
+        
+        # Off switch
+        if request.environ.get(DISABLE_TRANSFORM_REQUEST_KEY, False):
+            return None
+        
         try:
             published = request.get('PUBLISHED', None)
             

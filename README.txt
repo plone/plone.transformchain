@@ -41,7 +41,7 @@ text/html, ``''.join(result)`` should be an HTML string.
 The return value is passed to the next transform in the chain. The final
 transform should return a unicode string, an encoded string, or an iterable.
 
-If a byte string or unicode stirng is returned by the last transform in the
+If a byte string or unicode string is returned by the last transform in the
 chain, the ``Content-Length`` header will be automatically updated
 
 Return ``None`` to signal that the result should not be changed from the
@@ -77,3 +77,10 @@ You could register this in ZCML like so::
 
     <adapter class=".transforms.UpperTransform" name="example.uppertransform" />
 
+If you need to turn off transformations for a particular request, you can 
+set a key in ``request.environ``::
+
+    request.environ['plone.transformchain.disable'] = True
+
+This will leave the response untouched and will not invoke any
+``ITransform`` adapters at all.

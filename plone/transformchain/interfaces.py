@@ -6,6 +6,8 @@ try:
 except ImportError:
     IBaseTransformer = Interface
 
+DISABLE_TRANSFORM_REQUEST_KEY = 'plone.transformchain.disable'
+
 class ITransform(Interface):
     """Register a named multi adapter from (published, request,) to
     this interface to change the response.
