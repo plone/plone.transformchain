@@ -61,8 +61,10 @@ def applyTransform(request, body=None):
             body = response.getBody()
         
         result = body
-        if isinstance(result, basestring):
+        if isinstance(result, str):
             result = [result]
+        elif isinstance(result, unicode):
+            result = [result.encode(encoding)]
         
         transformed = transformer(request, result, encoding)
         if transformed is not None and transformed is not result:

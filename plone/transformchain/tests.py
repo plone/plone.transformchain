@@ -44,7 +44,10 @@ class FauxResponse(object):
 
 class FauxRequest(dict):
     
-    def __init__(self, published, response=FauxResponse('<html/>')):
+    def __init__(self, published, response=None):
+        if response is None:
+            response = FauxResponse('<html/>')
+        
         self['PUBLISHED'] = published
         self.response = response
         self.environ = {}
@@ -781,7 +784,47 @@ class TestZPublisherTransforms(unittest.TestCase, PlacelessSetup):
             self.failUnless(isinstance(request.response.getBody(), filestream_iterator,))
         finally:
             os.unlink(tmp)
-
+    
+    def test_applyTransform_str_input_body(self):
+        class FauxTransformer(object):
+            implements(ITransformer)
+            def __call__(self, request, result, encoding):
+                assert isinstance(result, list)
+                assert isinstance(result[0], str)
+                return 'dummystr'
+        
+        transformer = FauxTransformer()
+        provideUtility(transformer)
+        
+        published = FauxPublished()
+        request = FauxRequest(published)
+        request.response.setBody("<html />")
+        
+        applyTransformOnSuccess(FauxPubEvent(request))
+        
+        # note: the real setBody would encode here
+        self.assertEquals('dummystr', request.response.getBody())
+    
+    def test_applyTransform_unicode_input_body(self):
+        class FauxTransformer(object):
+            implements(ITransformer)
+            def __call__(self, request, result, encoding):
+                assert isinstance(result, list)
+                assert isinstance(result[0], str)
+                return u'dummystr'
+        
+        transformer = FauxTransformer()
+        provideUtility(transformer)
+        
+        published = FauxPublished()
+        request = FauxRequest(published)
+        request.response.setBody(u"<html />")
+        
+        applyTransformOnSuccess(FauxPubEvent(request))
+        
+        # note: the real setBody would encode here
+        self.assertEquals(u'dummystr', request.response.getBody())
+    
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestTransformChain))

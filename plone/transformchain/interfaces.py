@@ -63,8 +63,8 @@ class ITransformer(IBaseTransformer):
         `request` is the Zope request. Response headers may be read or
         modified in `request.response`. 
         
-        `result` is an iterable that represents the response body. When
-        unwound, its contents will match the response content type.
+        `result` is an iterable of byte strings that represents the response
+        body. When unwound, its contents will match the response content type.
         
         `encoding` is the default encoding used.
         
