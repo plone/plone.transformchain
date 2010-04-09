@@ -49,7 +49,7 @@ previous transform.
 
 Here is an example that uppercases everything::
 
-    from zope.interface import implements
+    from zope.interface import implements, Interface
     from zope.component import adapts
     
     from plone.transformchain.interfaces import ITransform
