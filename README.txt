@@ -75,7 +75,7 @@ Here is an example that uppercases everything::
 
 You could register this in ZCML like so::
 
-    <adapter class=".transforms.UpperTransform" name="example.uppertransform" />
+    <adapter factory=".transforms.UpperTransform" name="example.uppertransform" />
 
 If you need to turn off transformations for a particular request, you can 
 set a key in ``request.environ``::
