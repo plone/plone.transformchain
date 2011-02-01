@@ -1,4 +1,6 @@
-import unittest
+import unittest2 as unittest
+from plone.testing.zca import UNIT_TESTING
+
 import os
 import tempfile
 
@@ -11,7 +13,6 @@ except ImportError:
 
 from zope.interface import Interface, implements, alsoProvides
 from zope.component import adapts, provideAdapter, provideUtility
-from zope.app.testing.placelesssetup import PlacelessSetup
 
 from plone.transformchain.interfaces import ITransform, ITransformer
 from plone.transformchain.transformer import Transformer
@@ -55,15 +56,13 @@ class FauxRequest(dict):
 class FauxPublished(object):
     pass
 
-class TestTransformChain(unittest.TestCase, PlacelessSetup):
+class TestTransformChain(unittest.TestCase):
+    
+    layer = UNIT_TESTING
     
     def setUp(self):
-        PlacelessSetup.setUp(self)
         self.t = Transformer()
 
-    def tearDown(self):
-        PlacelessSetup.tearDown(self)
-        
     def test_simple(self):
         
         class Transform1(object):
@@ -623,14 +622,12 @@ class TestTransformChain(unittest.TestCase, PlacelessSetup):
         new_result = self.t(request, result, encoding)
         self.assertEquals("Initial Two One Three", new_result)
 
-class TestZPublisherTransforms(unittest.TestCase, PlacelessSetup):
+class TestZPublisherTransforms(unittest.TestCase):
+    
+    UNIT_TESTING
     
     def setUp(self):
-        PlacelessSetup.setUp(self)
         self.t = Transformer()
-
-    def tearDown(self):
-        PlacelessSetup.tearDown(self)
         
     def test_applyTransform_webdav_port(self):
         class DoNotCallTransformer(object):
@@ -824,9 +821,3 @@ class TestZPublisherTransforms(unittest.TestCase, PlacelessSetup):
         
         # note: the real setBody would encode here
         self.assertEquals(u'dummystr', request.response.getBody())
-    
-def test_suite():
-    suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(TestTransformChain))
-    suite.addTest(unittest.makeSuite(TestZPublisherTransforms))
-    return suite

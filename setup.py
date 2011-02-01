@@ -26,6 +26,7 @@ setup(name='plone.transformchain',
       extras_require={
         'repoze': ['repoze.zope2'],
         'Zope2.10': ['ZPublisherEventsBackport'],
+        'test': 'plone.testing [zca]',
       },
       install_requires=[
           'setuptools',
