@@ -4,11 +4,9 @@ import re
 from zope.interface import Interface
 from zope.interface.interfaces import IInterface
 from zope.component import queryUtility, adapter
-from zope.annotation.interfaces import IAnnotations
 
 from ZPublisher.Iterators import IStreamIterator
 from ZPublisher.HTTPResponse import default_encoding
-from ZPublisher.HTTPResponse import HTTPResponse
 
 from plone.transformchain.interfaces import ITransformer
 
@@ -122,12 +120,5 @@ def applyTransformOnFailure(event):
 
 
 def setErrorStatusOnResponse(event):
-    # use temporary response instance to avoid any side effect
-    # on actual response
-    tmp_response = HTTPResponse()
     error_class = event.exc_info[0]
-    tmp_response.setStatus(error_class)
-    error_status = tmp_response.status
-
-    annotations = IAnnotations(event.request)
-    annotations['error_status'] = error_status
+    event.request.response.setStatus(error_class)
