@@ -9,6 +9,9 @@ Changelog
   response.status is not set when IPubBeforeAbort is notified.
   [gotcha]
 
+- Don't transform FTP requests
+  [rochecompaan]
+
 1.0 - 2011-05-13
 ----------------
 

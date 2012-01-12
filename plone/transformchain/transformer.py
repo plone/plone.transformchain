@@ -7,6 +7,7 @@ from plone.transformchain.interfaces import ITransform, ITransformer
 from plone.transformchain.interfaces import DISABLE_TRANSFORM_REQUEST_KEY
 
 from ZODB.POSException import ConflictError
+from ZServer.FTPRequest import FTPRequest
 
 def sort_key(a, b):
     return cmp(a.order, b.order)
@@ -21,6 +22,11 @@ class Transformer(object):
     implements(ITransformer)
 
     def __call__(self, request, result, encoding):
+
+
+        # Don't transform FTP requests
+        if isinstance(request, FTPRequest):
+            return None
 
         # Off switch
         if request.environ.get(DISABLE_TRANSFORM_REQUEST_KEY, False):
