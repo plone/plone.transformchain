@@ -20,6 +20,8 @@ from plone.transformchain.zpublisher import applyTransformOnSuccess
 
 from ZPublisher.HTTPResponse import default_encoding
 from ZPublisher.Iterators import filestream_iterator
+from ZServer.FTPRequest import FTPRequest
+
 
 class FauxPubEvent(object):
 
@@ -52,6 +54,9 @@ class FauxRequest(dict):
         self['PUBLISHED'] = published
         self.response = response
         self.environ = {}
+
+class FauxFTPRequest(FauxRequest, FTPRequest):
+    pass
 
 class FauxPublished(object):
     pass
@@ -125,6 +130,12 @@ class TestTransformChain(unittest.TestCase):
         encoding = 'utf-8'
 
         new_result = self.t(request, result, encoding)
+        self.assertEquals(None, new_result)
+
+    def test_ftp_request_not_transformed(self):
+        request = FauxFTPRequest(FauxPublished())
+        result = ["Blah"]
+        new_result = self.t(request, result, 'utf8')
         self.assertEquals(None, new_result)
 
     def test_transform_string(self):
