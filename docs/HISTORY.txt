@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.0.1 (Unreleased)
+1.0.1 (2012-01-26)
 ------------------
 
 - Compute error_status and store it on request.
