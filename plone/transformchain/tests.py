@@ -723,6 +723,23 @@ class TestZPublisherTransforms(unittest.TestCase):
 
         self.assertEquals("dummy", transformer.encoding)
 
+    def test_applyTransform_other_encoding_with_header_missing_space(self):
+        class EncodingCaptureTransformer(object):
+            implements(ITransformer)
+            encoding = None
+            def __call__(self, request, result, encoding):
+                self.encoding = encoding
+
+        transformer = EncodingCaptureTransformer()
+        provideUtility(transformer)
+
+        published = FauxPublished()
+        request = FauxRequest(published)
+        request.response.headers['content-type'] = 'text/html;charset=dummy'
+        applyTransformOnSuccess(FauxPubEvent(request))
+
+        self.assertEquals("dummy", transformer.encoding)
+
     def test_applyTransform_str(self):
         class FauxTransformer(object):
             implements(ITransformer)
