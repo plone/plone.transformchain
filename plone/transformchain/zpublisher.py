@@ -20,7 +20,7 @@ except ImportError:
     class IPubBeforeAbort(Interface):
         pass
 
-CHARSET_RE = re.compile(r'(?:application|text)/[-+0-9a-z]+\s*;\scharset=([-_0-9a-z]+)(?:(?:\s*;)|\Z)', re.IGNORECASE)
+CHARSET_RE = re.compile(r'(?:application|text)/[-+0-9a-z]+\s*;\s?charset=([-_0-9a-z]+)(?:(?:\s*;)|\Z)', re.IGNORECASE)
 
 def extractEncoding(response):
     """Get the content encoding for the response body
