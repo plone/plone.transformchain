@@ -4,7 +4,11 @@ Changelog
 1.0.3 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- There was a problem with the charset regular expression, it expected one
+  space, and only one, between mimetype and charset. So a valid values like
+  "text/html;charset=utf-8" didn't match and default_encoding was returned.
+  We fixed it by allowing any number of spaces (including zero).
+  [jpgimenez]
 
 
 1.0.2 (2012-01-26)
