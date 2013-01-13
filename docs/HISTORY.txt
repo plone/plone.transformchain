@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.0.3 (unreleased)
+1.0.3 (2013-01-13)
 ------------------
 
 - There was a problem with the charset regular expression, it expected one
