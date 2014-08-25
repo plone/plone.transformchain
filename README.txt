@@ -51,25 +51,25 @@ Here is an example that uppercases everything::
 
     from zope.interface import implements, Interface
     from zope.component import adapts
-    
+
     from plone.transformchain.interfaces import ITransform
 
     class UpperTransform(object):
         implements(ITransform)
         adapts(Interface, Interface) # any context, any request
-        
+
         order = 1000
-        
+
         def __init__(self, published, request):
             self.published = published
             self.request = request
-        
+
         def transformBytes(self, result, encoding):
             return result.upper()
-            
+
         def transformUnicode(self, result, encoding):
             return result.upper()
-        
+
         def transformIterable(self, result, encoding):
             return [s.upper() for s in result]
 
@@ -77,7 +77,7 @@ You could register this in ZCML like so::
 
     <adapter factory=".transforms.UpperTransform" name="example.uppertransform" />
 
-If you need to turn off transformations for a particular request, you can 
+If you need to turn off transformations for a particular request, you can
 set a key in ``request.environ``::
 
     request.environ['plone.transformchain.disable'] = True
