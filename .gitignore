@@ -1,0 +1,4 @@
+*.pyc
+*.pyo
+/plone.transformchain.egg-info/
+/dist/
