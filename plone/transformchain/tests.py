@@ -4,12 +4,7 @@ from plone.testing.zca import UNIT_TESTING
 import os
 import tempfile
 
-# Load patch for Zope 2.10
-try:
-    from ZPublisher import interfaces
-except ImportError:
-    import ZPublisherEventsBackport
-
+from ZPublisher import interfaces
 
 from zope.interface import Interface, implements, alsoProvides
 from zope.component import adapts, provideAdapter, provideUtility

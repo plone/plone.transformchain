@@ -11,14 +11,7 @@ from ZPublisher.HTTPResponse import default_encoding
 from plone.transformchain.interfaces import ITransformer
 
 from ZPublisher.interfaces import IPubBeforeCommit
-
-try:
-    from ZPublisher.interfaces import IPubBeforeAbort
-except ImportError:
-    # old Zope 2.12 or old ZPublisherBackport - this interface won't be
-    # used, most likely, so the effect is that error messages aren't styled.
-    class IPubBeforeAbort(Interface):
-        pass
+from ZPublisher.interfaces import IPubBeforeAbort
 
 CHARSET_RE = re.compile(r'(?:application|text)/[-+0-9a-z]+\s*;\s?charset=([-_0-9a-z]+)(?:(?:\s*;)|\Z)', re.IGNORECASE)
 
@@ -45,11 +38,14 @@ def isEvilWebDAVRequest(request):
 
     return False
 
+def isDisabled(request):
+    return request.get('DISABLE_PLONE_TRANSFORM', False)
+
 def applyTransform(request, body=None):
     """Apply any transforms by delegating to the ITransformer utility
     """
 
-    if isEvilWebDAVRequest(request):
+    if isEvilWebDAVRequest(request) or isDisabled(request):
         return None
 
     transformer = queryUtility(ITransformer)
