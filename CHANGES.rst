@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.0.4 (unreleased)
+1.0.4 (2015-05-11)
 ------------------
 
 - Minor cleanup: whitespace, git ignores, rst.
