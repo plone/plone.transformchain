@@ -1,14 +1,14 @@
 from setuptools import setup, find_packages
-import os
 
 version = '1.0.4.dev0'
 
 setup(name='plone.transformchain',
       version=version,
       description="Hook into repoze.zope2 that allows third party packages to register a sequence of hooks that will be allowed to modify the response before it is returned to the browser",
-      long_description=open("README.txt").read() + "\n" +
-                       open(os.path.join("docs", "HISTORY.txt")).read(),
-      # Get more strings from http://www.python.org/pypi?%3Aaction=list_classifiers
+      long_description=(open("README.rst").read() + "\n" +
+                        open("CHANGES.rst").read()),
+      # Get more strings from
+      # http://pypi.python.org/pypi?%3Aaction=list_classifiers
       classifiers=[
         "Framework :: Plone",
         "Programming Language :: Python",
