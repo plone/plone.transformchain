@@ -10,10 +10,10 @@ setup(name='plone.transformchain',
       # Get more strings from
       # http://pypi.python.org/pypi?%3Aaction=list_classifiers
       classifiers=[
-        "Framework :: Plone",
-        "Programming Language :: Python",
-        "Topic :: Software Development :: Libraries :: Python Modules",
-        ],
+          "Framework :: Plone",
+          "Programming Language :: Python",
+          "Topic :: Software Development :: Libraries :: Python Modules",
+          ],
       keywords='zope2 repoze transform',
       author='Martin Aspeli',
       author_email='optilude@gmail.com',
@@ -24,9 +24,9 @@ setup(name='plone.transformchain',
       include_package_data=True,
       zip_safe=False,
       extras_require={
-        'repoze': ['repoze.zope2'],
-        'Zope2.10': ['ZPublisherEventsBackport'],
-        'test': 'plone.testing [zca]',
+          'repoze': ['repoze.zope2'],
+          'Zope2.10': ['ZPublisherEventsBackport'],
+          'test': 'plone.testing [zca]',
       },
       install_requires=[
           'setuptools',
