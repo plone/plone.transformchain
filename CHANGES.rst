@@ -4,7 +4,8 @@ Changelog
 1.0.4 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Minor cleanup: whitespace, git ignores, rst.
+  [gforcada, rnix, maurits]
 
 
 1.0.3 (2013-01-13)
