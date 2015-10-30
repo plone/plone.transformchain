@@ -4,7 +4,13 @@ Changelog
 1.0.5 (unreleased)
 ------------------
 
-- Nothing changed yet.
+New:
+
+- *add item here*
+
+Fixes:
+
+- *add item here*
 
 
 1.0.4 (2015-05-11)
@@ -52,4 +58,3 @@ Changelog
 ------------------
 
 - Initial release
-
