@@ -4,15 +4,21 @@ version = '1.0.5.dev0'
 
 setup(name='plone.transformchain',
       version=version,
-      description="Hook into repoze.zope2 that allows third party packages to register a sequence of hooks that will be allowed to modify the response before it is returned to the browser",
+      description=("Hook into repoze.zope2 that allows third party packages "
+                   "to register a sequence of hooks that will be allowed to "
+                   "modify the response before it is returned to the browser"),
       long_description=(open("README.rst").read() + "\n" +
                         open("CHANGES.rst").read()),
       # Get more strings from
-      # http://pypi.python.org/pypi?%3Aaction=list_classifiers
+      # https://pypi.python.org/pypi?%3Aaction=list_classifiers
       classifiers=[
           "Framework :: Plone",
+          "Framework :: Plone : 4.3",
+          "Framework :: Plone : 5.0",
           "Programming Language :: Python",
           "Topic :: Software Development :: Libraries :: Python Modules",
+          "Programming Language :: Python :: 2.6",
+          "Programming Language :: Python :: 2.7",
           ],
       keywords='zope2 repoze transform',
       author='Martin Aspeli',
