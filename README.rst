@@ -36,9 +36,7 @@ If a byte string or unicode string is returned by the last transform in the chai
 
 Return ``None`` to signal that the result should not be changed from the previous transform.
 
-Here is an example that uppercases everything:
-
-.. code_block:: python
+Here is an example that uppercases everything::
 
     from zope.component import adapter
     from zope.interface import implementer
@@ -64,9 +62,7 @@ Here is an example that uppercases everything:
         def transformIterable(self, result, encoding):
             return [s.upper() for s in result]
 
-You could register this in ZCML like so:
-
-.. code_block:: xml
+You could register this in ZCML like so::
 
     <adapter factory=".transforms.UpperTransform" name="example.uppertransform" />
 
