@@ -1,16 +1,18 @@
 Changelog
 =========
 
-1.0.5 (unreleased)
+1.1.0 (unreleased)
 ------------------
 
 New:
 
-- *add item here*
+- Require Zope2 >= 2.13.23
+  [jensens]
 
 Fixes:
 
-- *add item here*
+- PEP8 et al. use zca decorators, ...
+  [jensens]
 
 
 1.0.4 (2015-05-11)
