@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from operator import attrgetter
 from plone.transformchain.interfaces import DISABLE_TRANSFORM_REQUEST_KEY
 from plone.transformchain.interfaces import ITransform
 from plone.transformchain.interfaces import ITransformer
@@ -11,10 +12,6 @@ import logging
 
 
 LOGGER = logging.getLogger('plone.transformchain')
-
-
-def sort_key(a, b):
-    return cmp(a.order, b.order)
 
 
 @implementer(ITransformer)
@@ -34,12 +31,10 @@ class Transformer(object):
 
         try:
             published = request.get('PUBLISHED', None)
-
-            handlers = [
+            handlers = (
                 v[1] for v in getAdapters((published, request,), ITransform)
-            ]
-
-            for handler in sorted(handlers, key=sort_key):
+            )
+            for handler in sorted(handlers, key=attrgetter('order')):
                 if isinstance(result, unicode):
                     newResult = handler.transformUnicode(result, encoding)
                 elif isinstance(result, str):
