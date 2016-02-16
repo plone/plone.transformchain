@@ -1,29 +1,26 @@
-import logging
-
-from zope.interface import implements
-from zope.component import getAdapters
-
-from plone.transformchain.interfaces import ITransform, ITransformer
+# -*- coding: utf-8 -*-
+from operator import attrgetter
 from plone.transformchain.interfaces import DISABLE_TRANSFORM_REQUEST_KEY
-
+from plone.transformchain.interfaces import ITransform
+from plone.transformchain.interfaces import ITransformer
 from ZODB.POSException import ConflictError
+from zope.component import getAdapters
+from zope.interface import implementer
 from ZServer.FTPRequest import FTPRequest
 
-def sort_key(a, b):
-    return cmp(a.order, b.order)
+import logging
+
 
 LOGGER = logging.getLogger('plone.transformchain')
 
+
+@implementer(ITransformer)
 class Transformer(object):
     """Delegate the opportunity to transform the response to multiple,
     ordered adapters.
     """
 
-    implements(ITransformer)
-
     def __call__(self, request, result, encoding):
-
-
         # Don't transform FTP requests
         if isinstance(request, FTPRequest):
             return None
@@ -34,12 +31,10 @@ class Transformer(object):
 
         try:
             published = request.get('PUBLISHED', None)
-
-            handlers = [v[1] for v in getAdapters((published, request,), ITransform)]
-            handlers.sort(sort_key)
-
-            for handler in handlers:
-
+            handlers = (
+                v[1] for v in getAdapters((published, request,), ITransform)
+            )
+            for handler in sorted(handlers, key=attrgetter('order')):
                 if isinstance(result, unicode):
                     newResult = handler.transformUnicode(result, encoding)
                 elif isinstance(result, str):
@@ -53,5 +48,7 @@ class Transformer(object):
             return result
         except ConflictError:
             raise
-        except Exception, e:
-            LOGGER.exception(u"Unexpected error whilst trying to apply transform chain")
+        except Exception:
+            LOGGER.exception(
+                u"Unexpected error whilst trying to apply transform chain"
+            )

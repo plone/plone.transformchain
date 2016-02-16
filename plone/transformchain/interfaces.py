@@ -1,5 +1,7 @@
-from zope.interface import Interface
+# -*- coding: utf-8 -*-
 from zope import schema
+from zope.interface import Interface
+
 
 try:
     from repoze.zope2.interfaces import ITransformer as IBaseTransformer
@@ -7,6 +9,7 @@ except ImportError:
     IBaseTransformer = Interface
 
 DISABLE_TRANSFORM_REQUEST_KEY = 'plone.transformchain.disable'
+
 
 class ITransform(Interface):
     """Register a named multi adapter from (published, request,) to
@@ -49,6 +52,7 @@ class ITransform(Interface):
 
         Return None to indicate that the response should not be modified.
         """
+
 
 class ITransformer(IBaseTransformer):
     """Low-level hook. This interface is defined in repoze.zope2, but since
