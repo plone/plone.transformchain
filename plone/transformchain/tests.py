@@ -237,15 +237,15 @@ class TestTransformChain(unittest.TestCase):
         class Transform1(FauxTransformBase):
             pass
 
-        provideAdapter(Transform1, name=u"test.one")
+        provideAdapter(Transform1, name=u'test.one')
 
         published = FauxPublished()
         request = FauxRequest(published)
-        result = ["Blah"]
+        result = ['Blah']
         encoding = 'utf-8'
 
         new_result = self.t(request, result, encoding)
-        self.assertEquals(["Blah"], new_result)
+        self.assertEqual(['Blah'], new_result)
 
     def test_abort_chain(self):
 
