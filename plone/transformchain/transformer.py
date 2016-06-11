@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
-from operator import attrgetter
+from plone.transformchain import events
 from plone.transformchain.interfaces import DISABLE_TRANSFORM_REQUEST_KEY
 from plone.transformchain.interfaces import ITransform
 from plone.transformchain.interfaces import ITransformer
 from ZODB.POSException import ConflictError
 from zope.component import getAdapters
+from zope.event import notify
 from zope.interface import implementer
 from ZServer.FTPRequest import FTPRequest
 
@@ -14,6 +15,10 @@ import logging
 LOGGER = logging.getLogger('plone.transformchain')
 
 
+def _order_getter(pair):
+    return pair[1].order
+
+
 @implementer(ITransformer)
 class Transformer(object):
     """Delegate the opportunity to transform the response to multiple,
@@ -21,20 +26,21 @@ class Transformer(object):
     """
 
     def __call__(self, request, result, encoding):
-        # Don't transform FTP requests
         if isinstance(request, FTPRequest):
+            # Don't transform FTP requests
             return None
-
-        # Off switch
         if request.environ.get(DISABLE_TRANSFORM_REQUEST_KEY, False):
+            # Off switch
             return None
-
+        notify(events.BeforeTransforms(request))
         try:
             published = request.get('PUBLISHED', None)
-            handlers = (
-                v[1] for v in getAdapters((published, request,), ITransform)
+            handlers = sorted(
+                getAdapters((published, request,), ITransform),
+                key=_order_getter
             )
-            for handler in sorted(handlers, key=attrgetter('order')):
+            for name, handler in handlers:
+                notify(events.BeforeSingleTransform(request, name, handler))
                 if isinstance(result, unicode):
                     newResult = handler.transformUnicode(result, encoding)
                 elif isinstance(result, str):
@@ -44,7 +50,8 @@ class Transformer(object):
 
                 if newResult is not None:
                     result = newResult
-
+                notify(events.AfterSingleTransform(request, name, handler))
+            notify(events.AfterTransforms(request))
             return result
         except ConflictError:
             raise
