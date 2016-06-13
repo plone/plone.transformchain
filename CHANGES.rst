@@ -1,12 +1,13 @@
 Changelog
 =========
 
-1.1.1 (unreleased)
+1.2.0 (unreleased)
 ------------------
 
 New:
 
-- *add item here*
+- Added events to notifiy before/after all/single transform(s) are executed.
+  [jensens]
 
 Fixes:
 

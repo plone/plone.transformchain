@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from zope import schema
+from zope.interface import Attribute
 from zope.interface import Interface
 
 
@@ -79,3 +80,39 @@ class ITransformer(IBaseTransformer):
 
         Do not call `request.response.setBody()`. It will have no effect.
         """
+
+
+class IBaseTransformEvent(Interface):
+    """Base class for transform events.
+
+    Transform events are notified at different points in transformations.
+    """
+    request = Attribute('The request being affected')
+
+
+class IBeforeTransformsEvent(IBaseTransformEvent):
+    """Notified before any transforms are started.
+    """
+
+
+class IAfterTransformsEvent(IBaseTransformEvent):
+    """Notified after all transforms are finished.
+    """
+
+
+class IBaseSingleTransformEvent(IBaseTransformEvent):
+    """Base class for a single transformation notification.
+    """
+
+    name = Attribute('the name of the transformation')
+    handler = Attribute('the transformation handler')
+
+
+class IBeforeSingleTransformEvent(IBaseSingleTransformEvent):
+    """Notified before a single Transformation is executed.
+    """
+
+
+class IAfterSingleTransformEvent(IBaseSingleTransformEvent):
+    """Notified after a single Transformation is executed.
+    """
