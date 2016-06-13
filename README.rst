@@ -10,9 +10,9 @@ The order of the transforms can be maintained using the ``order`` property of th
 
 One of three methods will be called, depending on what type of input was obtained from the publisher and/or the previous method.
 
-  * ``transformBytes()`` is called if the input is a str (bytes) object
-  * ``transformUnicode()`` is called if the input is a unicode object
-  * ``transformIterable()`` is called if the input is another type of iterable
+* ``transformBytes()`` is called if the input is a str (bytes) object
+* ``transformUnicode()`` is called if the input is a unicode object
+* ``transformIterable()`` is called if the input is another type of iterable
 
 Each stage can return a byte string, a unicode string, or an iterable.
 
