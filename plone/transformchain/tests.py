@@ -16,7 +16,7 @@ from ZServer.FTPRequest import FTPRequest
 
 import os
 import tempfile
-import unittest2 as unittest
+import unittest
 
 
 class FauxPubEvent(object):

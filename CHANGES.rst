@@ -15,6 +15,9 @@ New:
 - Added events to notifiy before/after all/single transform(s) are executed.
   [jensens]
 
+- Remove unittest2 dependency
+  [kakshay21]
+
 
 1.1.0 (2016-02-21)
 ------------------
