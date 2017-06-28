@@ -4,7 +4,10 @@ Changelog
 1.2.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+Bug fixes:
+
+- Remove unittest2 dependency
+  [kakshay21]
 
 
 1.2.0 (2016-06-21)
@@ -12,11 +15,8 @@ Changelog
 
 New:
 
-- Added events to notifiy before/after all/single transform(s) are executed.
+- Added events to notify before/after all/single transform(s) are executed.
   [jensens]
-
-- Remove unittest2 dependency
-  [kakshay21]
 
 
 1.1.0 (2016-02-21)
