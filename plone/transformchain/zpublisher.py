@@ -8,6 +8,7 @@ from ZPublisher.interfaces import IPubBeforeCommit
 from ZPublisher.Iterators import IStreamIterator
 
 import re
+import six
 
 
 try:
@@ -68,7 +69,7 @@ def applyTransform(request, body=None):
         result = body
         if isinstance(result, str):
             result = [result]
-        elif isinstance(result, unicode):
+        elif isinstance(result, six.text_type):
             result = [result.encode(encoding)]
 
         transformed = transformer(request, result, encoding)
@@ -91,7 +92,7 @@ def applyTransformOnSuccess(event):
         response.setBody(transformed)
     # setBody() can deal with byte and unicode strings (and will encode as
     # necessary)...
-    elif isinstance(transformed, basestring):
+    elif isinstance(transformed, six.string_types):
         response.setBody(transformed)
     # ... but not with iterables
     else:
