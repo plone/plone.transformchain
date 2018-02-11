@@ -9,6 +9,7 @@ from zope.event import notify
 from zope.interface import implementer
 from ZServer.FTPRequest import FTPRequest
 
+import six
 import logging
 
 
@@ -41,7 +42,7 @@ class Transformer(object):
             )
             for name, handler in handlers:
                 notify(events.BeforeSingleTransform(request, name, handler))
-                if isinstance(result, unicode):
+                if isinstance(result, six.text_type):
                     newResult = handler.transformUnicode(result, encoding)
                 elif isinstance(result, str):
                     newResult = handler.transformBytes(result, encoding)

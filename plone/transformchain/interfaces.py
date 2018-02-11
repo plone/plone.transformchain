@@ -29,9 +29,9 @@ class ITransform(Interface):
 
     def transformUnicode(result, encoding):
         """Called to allow the transformer to modify the result if the result
-        is a unicode string.
+        is a six.text_type string.
 
-        Return a new unicode string, encoded string or iterable.
+        Return a new six.text_type string, encoded string or iterable.
 
         Return None to indicate that the response should not be modified.
         """
@@ -40,7 +40,7 @@ class ITransform(Interface):
         """Called to allow the transformer to modify the result if the result
         is an encoded string.
 
-        Return a new unicode string, encoded string or iterable.
+        Return a new six.text_type string, encoded string or iterable.
 
         Return None to indicate that the response should not be modified.
         """
@@ -49,7 +49,7 @@ class ITransform(Interface):
         """Called to allow the transformer to modify the result if the result
         is an iterable of strings (as per the WSGI specification).
 
-        Return a new unicode string, encoded string or iterable.
+        Return a new six.text_type string, encoded string or iterable.
 
         Return None to indicate that the response should not be modified.
         """
@@ -74,7 +74,7 @@ class ITransformer(IBaseTransformer):
         `encoding` is the default encoding used.
 
         Return the new result iterable, or a string. If a string is returned,
-        the Content-Type header will be updated automatically. If a unicode
+        the Content-Type header will be updated automatically. If a six.text_type
         string is returned, it will be encoded with the current content
         encoding.
 
