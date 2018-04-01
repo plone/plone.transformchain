@@ -53,7 +53,7 @@ class Transformer(object):
                 notify(events.BeforeSingleTransform(request, name, handler))
                 if isinstance(result, six.text_type):
                     newResult = handler.transformUnicode(result, encoding)
-                elif isinstance(result, str):
+                elif isinstance(result, six.binary_type):
                     newResult = handler.transformBytes(result, encoding)
                 else:
                     newResult = handler.transformIterable(result, encoding)
