@@ -14,7 +14,8 @@ New features:
 
 Bug fixes:
 
-- *add item here*
+- Mode fixes for Python 2 / 3 compatibility
+  [pbauer]
 
 
 1.2.2 (2018-02-11)
