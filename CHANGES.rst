@@ -10,11 +10,11 @@ Breaking changes:
 
 New features:
 
-- *add item here*
+- Make ZServer optional
 
 Bug fixes:
 
-- Mode fixes for Python 2 / 3 compatibility
+- More fixes for Python 2 / 3 compatibility
   [pbauer]
 
 
