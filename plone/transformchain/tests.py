@@ -14,10 +14,11 @@ from ZPublisher.HTTPResponse import default_encoding
 from ZPublisher.Iterators import filestream_iterator
 
 import os
+import pkg_resources
 import tempfile
 import unittest
 
-import pkg_resources
+
 HAS_ZSERVER = True
 try:
     dist = pkg_resources.get_distribution('ZServer')
@@ -152,7 +153,7 @@ class TestTransformChain(unittest.TestCase):
         new_result = self.t(request, result, encoding)
         self.assertEqual(None, new_result)
 
-    @unittest.skipUnless(HAS_ZSERVER)
+    @unittest.skipUnless(HAS_ZSERVER, 'ZServer is optional')
     def test_ftp_request_not_transformed(self):
         request = FauxFTPRequest(FauxPublished())
         result = ['Blah']
