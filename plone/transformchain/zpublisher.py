@@ -96,7 +96,7 @@ def applyTransformOnSuccess(event):
         response.setBody(transformed)
     # ... but not with iterables
     else:
-        response.setBody(''.join(transformed))
+        response.setBody(b''.join(transformed))
 
 
 @adapter(IPubBeforeAbort)

@@ -7,10 +7,19 @@ from ZODB.POSException import ConflictError
 from zope.component import getAdapters
 from zope.event import notify
 from zope.interface import implementer
-from ZServer.FTPRequest import FTPRequest
 
 import six
 import logging
+
+import pkg_resources
+HAS_ZSERVER = True
+try:
+    dist = pkg_resources.get_distribution('ZServer')
+except pkg_resources.DistributionNotFound:
+    HAS_ZSERVER = False
+
+if HAS_ZSERVER:
+    from ZServer.FTPRequest import FTPRequest
 
 
 LOGGER = logging.getLogger('plone.transformchain')
@@ -27,7 +36,7 @@ class Transformer(object):
     """
 
     def __call__(self, request, result, encoding):
-        if isinstance(request, FTPRequest):
+        if HAS_ZSERVER and isinstance(request, FTPRequest):
             # Don't transform FTP requests
             return None
         if request.environ.get(DISABLE_TRANSFORM_REQUEST_KEY, False):
@@ -44,7 +53,7 @@ class Transformer(object):
                 notify(events.BeforeSingleTransform(request, name, handler))
                 if isinstance(result, six.text_type):
                     newResult = handler.transformUnicode(result, encoding)
-                elif isinstance(result, str):
+                elif isinstance(result, six.binary_type):
                     newResult = handler.transformBytes(result, encoding)
                 else:
                     newResult = handler.transformIterable(result, encoding)

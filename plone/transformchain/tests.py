@@ -12,11 +12,21 @@ from zope.interface import implementer
 from zope.interface import Interface
 from ZPublisher.HTTPResponse import default_encoding
 from ZPublisher.Iterators import filestream_iterator
-from ZServer.FTPRequest import FTPRequest
 
 import os
+import pkg_resources
 import tempfile
 import unittest
+
+
+HAS_ZSERVER = True
+try:
+    dist = pkg_resources.get_distribution('ZServer')
+except pkg_resources.DistributionNotFound:
+    HAS_ZSERVER = False
+
+if HAS_ZSERVER:
+    from ZServer.FTPRequest import FTPRequest
 
 
 class FauxPubEvent(object):
@@ -57,8 +67,9 @@ class FauxRequest(dict):
         self.environ = {}
 
 
-class FauxFTPRequest(FauxRequest, FTPRequest):
-    pass
+if HAS_ZSERVER:
+    class FauxFTPRequest(FauxRequest, FTPRequest):
+        pass
 
 
 class FauxPublished(object):
@@ -142,6 +153,7 @@ class TestTransformChain(unittest.TestCase):
         new_result = self.t(request, result, encoding)
         self.assertEqual(None, new_result)
 
+    @unittest.skipUnless(HAS_ZSERVER, 'ZServer is optional')
     def test_ftp_request_not_transformed(self):
         request = FauxFTPRequest(FauxPublished())
         result = ['Blah']
