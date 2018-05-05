@@ -1,12 +1,13 @@
 Changelog
 =========
 
-1.2.3 (unreleased)
+2.0.0 (unreleased)
 ------------------
 
 Breaking changes:
 
-- *add item here*
+- Drop support for Python 2.6.
+  [jensens]
 
 New features:
 
