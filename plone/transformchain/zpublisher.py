@@ -67,7 +67,7 @@ def applyTransform(request, body=None):
             body = response.getBody()
 
         result = body
-        if isinstance(result, str):
+        if isinstance(result, six.binary_type):
             result = [result]
         elif isinstance(result, six.text_type):
             result = [result.encode(encoding)]
