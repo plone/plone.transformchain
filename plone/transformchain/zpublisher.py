@@ -96,10 +96,13 @@ def applyTransformOnSuccess(event):
             or isinstance(transformed, six.binary_type):
         response.setBody(transformed)
     # ... but not with iterables
-    elif hasattr(transformed, '__iter__'):
-        for it in transformed:
-            if isinstance(it, six.binary_type):
-                it = it.decode('utf-8')
+    else:
+        transformed = map(
+            lambda it: it.decode('utf-8')
+            if isinstance(it, six.binary_type)
+            else it,
+            transformed
+        )
         response.setBody(''.join(transformed))
 
 
