@@ -31,8 +31,8 @@ New features:
 
 Bug fixes:
 
-- More fixes for Python 2 / 3 compatibility
-  [pbauer]
+- More fixes for Python 2 / 3 compatibility.
+  [pbauer, thet]
 
 
 1.2.2 (2018-02-11)
