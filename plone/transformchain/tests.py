@@ -217,14 +217,14 @@ class TestTransformChain(unittest.TestCase):
         class Transform1(FauxTransformBase):
 
             def transformIterable(self, result, encoding):
-                return ''.join(result) + ' One'
+                return u''.join(result) + u' One'
 
         class Transform2(FauxTransformBase):
 
             order = 1
 
             def transformUnicode(self, result, encoding):
-                return result.encode(encoding) + ' Two'.encode(encoding)
+                return result.encode(encoding) + u' Two'.encode(encoding)
 
         class Transform3(FauxTransformBase):
 
