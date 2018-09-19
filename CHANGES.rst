@@ -14,7 +14,8 @@ New features:
 
 Bug fixes:
 
-- *add item here*
+- More py3 test and functionality fixes.
+  [pbauer, thet]
 
 
 2.0.0 (2018-06-20)
