@@ -14,7 +14,8 @@ New features:
 
 Bug fixes:
 
-- *add item here*
+- More py3 test and functionality fixes.
+  [pbauer, thet]
 
 
 2.0.0 (2018-06-20)
@@ -31,8 +32,8 @@ New features:
 
 Bug fixes:
 
-- More fixes for Python 2 / 3 compatibility
-  [pbauer]
+- More fixes for Python 2 / 3 compatibility.
+  [pbauer, thet]
 
 
 1.2.2 (2018-02-11)

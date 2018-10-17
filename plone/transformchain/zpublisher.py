@@ -67,7 +67,7 @@ def applyTransform(request, body=None):
             body = response.getBody()
 
         result = body
-        if isinstance(result, str):
+        if isinstance(result, six.binary_type):
             result = [result]
         elif isinstance(result, six.text_type):
             result = [result.encode(encoding)]
@@ -92,11 +92,18 @@ def applyTransformOnSuccess(event):
         response.setBody(transformed)
     # setBody() can deal with byte and unicode strings (and will encode as
     # necessary)...
-    elif isinstance(transformed, six.string_types):
+    elif isinstance(transformed, six.string_types)\
+            or isinstance(transformed, six.binary_type):
         response.setBody(transformed)
     # ... but not with iterables
     else:
-        response.setBody(b''.join(transformed))
+        transformed = map(
+            lambda it: it.decode('utf-8')
+            if isinstance(it, six.binary_type)
+            else it,
+            transformed
+        )
+        response.setBody(''.join(transformed))
 
 
 @adapter(IPubBeforeAbort)
