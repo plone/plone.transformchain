@@ -15,6 +15,7 @@ setup(
     # Get more strings from
     # https://pypi.org/classifiers/
     classifiers=[
+        "Development Status :: 5 - Production/Stable",
         "Framework :: Plone",
         "Framework :: Plone :: 5.0",
         "Framework :: Plone :: 5.1",
