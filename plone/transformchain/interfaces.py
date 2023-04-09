@@ -3,11 +3,6 @@ from zope.interface import Attribute
 from zope.interface import Interface
 
 
-try:
-    from repoze.zope2.interfaces import ITransformer as IBaseTransformer
-except ImportError:
-    IBaseTransformer = Interface
-
 DISABLE_TRANSFORM_REQUEST_KEY = "plone.transformchain.disable"
 
 
@@ -54,7 +49,7 @@ class ITransform(Interface):
         """
 
 
-class ITransformer(IBaseTransformer):
+class ITransformer(Interface):
     """Low-level hook. This interface is defined in repoze.zope2, but since
     this package can be used with the classic ZPublisher as well, we redefine
     it here. You probably don't want to use this directly; you want to use
