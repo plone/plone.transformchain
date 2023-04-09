@@ -9,7 +9,6 @@ from zope.interface import implementer
 
 import logging
 import pkg_resources
-import six
 
 
 HAS_ZSERVER = True

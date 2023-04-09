@@ -7,7 +7,6 @@ from ZPublisher.interfaces import IPubBeforeCommit
 from ZPublisher.Iterators import IStreamIterator
 
 import re
-import six
 
 
 try:
