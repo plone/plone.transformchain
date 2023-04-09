@@ -13,19 +13,8 @@ from ZPublisher.HTTPResponse import default_encoding
 from ZPublisher.Iterators import filestream_iterator
 
 import os
-import pkg_resources
 import tempfile
 import unittest
-
-
-HAS_ZSERVER = True
-try:
-    dist = pkg_resources.get_distribution("ZServer")
-except pkg_resources.DistributionNotFound:
-    HAS_ZSERVER = False
-
-if HAS_ZSERVER:
-    from ZServer.FTPRequest import FTPRequest
 
 
 class FauxPubEvent:
@@ -61,12 +50,6 @@ class FauxRequest(dict):
         self["PUBLISHED"] = published
         self.response = response
         self.environ = {}
-
-
-if HAS_ZSERVER:
-
-    class FauxFTPRequest(FauxRequest, FTPRequest):
-        pass
 
 
 class FauxPublished:
@@ -142,13 +125,6 @@ class TestTransformChain(unittest.TestCase):
         encoding = "utf-8"
 
         new_result = self.t(request, result, encoding)
-        self.assertEqual(None, new_result)
-
-    @unittest.skipUnless(HAS_ZSERVER, "ZServer is optional")
-    def test_ftp_request_not_transformed(self):
-        request = FauxFTPRequest(FauxPublished())
-        result = ["Blah"]
-        new_result = self.t(request, result, "utf8")
         self.assertEqual(None, new_result)
 
     def test_transform_bytes(self):
