@@ -7,10 +7,11 @@ from zope.component import getAdapters
 from zope.event import notify
 from zope.interface import implementer
 
-import six
 import logging
-
 import pkg_resources
+import six
+
+
 HAS_ZSERVER = True
 try:
     dist = pkg_resources.get_distribution('ZServer')
