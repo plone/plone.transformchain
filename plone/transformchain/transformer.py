@@ -14,7 +14,7 @@ import six
 
 HAS_ZSERVER = True
 try:
-    dist = pkg_resources.get_distribution('ZServer')
+    dist = pkg_resources.get_distribution("ZServer")
 except pkg_resources.DistributionNotFound:
     HAS_ZSERVER = False
 
@@ -22,7 +22,7 @@ if HAS_ZSERVER:
     from ZServer.FTPRequest import FTPRequest
 
 
-LOGGER = logging.getLogger('plone.transformchain')
+LOGGER = logging.getLogger("plone.transformchain")
 
 
 def _order_getter(pair):
@@ -44,10 +44,16 @@ class Transformer:
             return None
         notify(events.BeforeTransforms(request))
         try:
-            published = request.get('PUBLISHED', None)
+            published = request.get("PUBLISHED", None)
             handlers = sorted(
-                getAdapters((published, request,), ITransform),
-                key=_order_getter
+                getAdapters(
+                    (
+                        published,
+                        request,
+                    ),
+                    ITransform,
+                ),
+                key=_order_getter,
             )
             for name, handler in handlers:
                 notify(events.BeforeSingleTransform(request, name, handler))
@@ -66,6 +72,4 @@ class Transformer:
         except ConflictError:
             raise
         except Exception:
-            LOGGER.exception(
-                "Unexpected error whilst trying to apply transform chain"
-            )
+            LOGGER.exception("Unexpected error whilst trying to apply transform chain")

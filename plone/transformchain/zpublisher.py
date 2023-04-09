@@ -18,18 +18,17 @@ except ImportError:
     class IPubBeforeAbort(Interface):
         pass
 
+
 CHARSET_RE = re.compile(
-    r'(?:application|text)/[-+0-9a-z]+\s*;\s?charset=([-_0-9a-z]+)'
-    r'(?:(?:\s*;)|\Z)',
-    re.IGNORECASE
+    r"(?:application|text)/[-+0-9a-z]+\s*;\s?charset=([-_0-9a-z]+)" r"(?:(?:\s*;)|\Z)",
+    re.IGNORECASE,
 )
 
 
 def extractEncoding(response):
-    """Get the content encoding for the response body
-    """
+    """Get the content encoding for the response body"""
     encoding = default_encoding
-    ct = response.headers.get('content-type')
+    ct = response.headers.get("content-type")
     if ct:
         match = CHARSET_RE.match(ct)
         if match:
@@ -38,21 +37,23 @@ def extractEncoding(response):
 
 
 def isEvilWebDAVRequest(request):
-    if request.get('WEBDAV_SOURCE_PORT', None):
+    if request.get("WEBDAV_SOURCE_PORT", None):
         return True
 
-    if request.get('REQUEST_METHOD', 'GET').upper() not in ('GET', 'POST',):
+    if request.get("REQUEST_METHOD", "GET").upper() not in (
+        "GET",
+        "POST",
+    ):
         return True
 
-    if request.get('PATH_INFO', '').endswith('manage_DAVget'):
+    if request.get("PATH_INFO", "").endswith("manage_DAVget"):
         return True
 
     return False
 
 
 def applyTransform(request, body=None):
-    """Apply any transforms by delegating to the ITransformer utility
-    """
+    """Apply any transforms by delegating to the ITransformer utility"""
 
     if isEvilWebDAVRequest(request):
         return None
@@ -80,8 +81,7 @@ def applyTransform(request, body=None):
 
 @adapter(IPubBeforeCommit)
 def applyTransformOnSuccess(event):
-    """Apply the transform after a successful request
-    """
+    """Apply the transform after a successful request"""
     transformed = applyTransform(event.request)
     if transformed is None:
         return
@@ -91,24 +91,19 @@ def applyTransformOnSuccess(event):
         response.setBody(transformed)
     # setBody() can deal with byte and unicode strings (and will encode as
     # necessary)...
-    elif isinstance(transformed, str)\
-            or isinstance(transformed, bytes):
+    elif isinstance(transformed, str) or isinstance(transformed, bytes):
         response.setBody(transformed)
     # ... but not with iterables
     else:
         transformed = map(
-            lambda it: it.decode('utf-8')
-            if isinstance(it, bytes)
-            else it,
-            transformed
+            lambda it: it.decode("utf-8") if isinstance(it, bytes) else it, transformed
         )
-        response.setBody(''.join(transformed))
+        response.setBody("".join(transformed))
 
 
 @adapter(IPubBeforeAbort)
 def applyTransformOnFailure(event):
-    """Apply the transform to the error html output
-    """
+    """Apply the transform to the error html output"""
     if event.retry:
         return
     # response.status might still be 200 because

@@ -6,13 +6,11 @@ from zope.interface import implementer
 
 
 class BaseTransformEvent:
-
     def __init__(self, request):
         self.request = request
 
 
 class BaseSingleTransformEvent(BaseTransformEvent):
-
     def __init__(self, request, name, handler):
         super().__init__(request)
         self.name = name

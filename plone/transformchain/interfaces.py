@@ -8,7 +8,7 @@ try:
 except ImportError:
     IBaseTransformer = Interface
 
-DISABLE_TRANSFORM_REQUEST_KEY = 'plone.transformchain.disable'
+DISABLE_TRANSFORM_REQUEST_KEY = "plone.transformchain.disable"
 
 
 class ITransform(Interface):
@@ -86,32 +86,28 @@ class IBaseTransformEvent(Interface):
 
     Transform events are notified at different points in transformations.
     """
-    request = Attribute('The request being affected')
+
+    request = Attribute("The request being affected")
 
 
 class IBeforeTransformsEvent(IBaseTransformEvent):
-    """Notified before any transforms are started.
-    """
+    """Notified before any transforms are started."""
 
 
 class IAfterTransformsEvent(IBaseTransformEvent):
-    """Notified after all transforms are finished.
-    """
+    """Notified after all transforms are finished."""
 
 
 class IBaseSingleTransformEvent(IBaseTransformEvent):
-    """Base class for a single transformation notification.
-    """
+    """Base class for a single transformation notification."""
 
-    name = Attribute('the name of the transformation')
-    handler = Attribute('the transformation handler')
+    name = Attribute("the name of the transformation")
+    handler = Attribute("the transformation handler")
 
 
 class IBeforeSingleTransformEvent(IBaseSingleTransformEvent):
-    """Notified before a single Transformation is executed.
-    """
+    """Notified before a single Transformation is executed."""
 
 
 class IAfterSingleTransformEvent(IBaseSingleTransformEvent):
-    """Notified after a single Transformation is executed.
-    """
+    """Notified after a single Transformation is executed."""
