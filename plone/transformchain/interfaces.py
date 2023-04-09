@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from zope import schema
 from zope.interface import Attribute
 from zope.interface import Interface
@@ -25,7 +24,7 @@ class ITransform(Interface):
     positive or negative.
     """
 
-    order = schema.Int(title=u"Order")
+    order = schema.Int(title="Order")
 
     def transformUnicode(result, encoding):
         """Called to allow the transformer to modify the result if the result

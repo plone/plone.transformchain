@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from plone.transformchain.interfaces import ITransformer
 from zope.component import adapter
 from zope.component import queryUtility
@@ -67,9 +66,9 @@ def applyTransform(request, body=None):
             body = response.getBody()
 
         result = body
-        if isinstance(result, six.binary_type):
+        if isinstance(result, bytes):
             result = [result]
-        elif isinstance(result, six.text_type):
+        elif isinstance(result, str):
             result = [result.encode(encoding)]
 
         transformed = transformer(request, result, encoding)
@@ -92,14 +91,14 @@ def applyTransformOnSuccess(event):
         response.setBody(transformed)
     # setBody() can deal with byte and unicode strings (and will encode as
     # necessary)...
-    elif isinstance(transformed, six.string_types)\
-            or isinstance(transformed, six.binary_type):
+    elif isinstance(transformed, str)\
+            or isinstance(transformed, bytes):
         response.setBody(transformed)
     # ... but not with iterables
     else:
         transformed = map(
             lambda it: it.decode('utf-8')
-            if isinstance(it, six.binary_type)
+            if isinstance(it, bytes)
             else it,
             transformed
         )

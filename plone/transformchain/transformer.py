@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from plone.transformchain import events
 from plone.transformchain.interfaces import DISABLE_TRANSFORM_REQUEST_KEY
 from plone.transformchain.interfaces import ITransform
@@ -30,7 +29,7 @@ def _order_getter(pair):
 
 
 @implementer(ITransformer)
-class Transformer(object):
+class Transformer:
     """Delegate the opportunity to transform the response to multiple,
     ordered adapters.
     """
@@ -51,9 +50,9 @@ class Transformer(object):
             )
             for name, handler in handlers:
                 notify(events.BeforeSingleTransform(request, name, handler))
-                if isinstance(result, six.text_type):
+                if isinstance(result, str):
                     newResult = handler.transformUnicode(result, encoding)
-                elif isinstance(result, six.binary_type):
+                elif isinstance(result, bytes):
                     newResult = handler.transformBytes(result, encoding)
                 else:
                     newResult = handler.transformIterable(result, encoding)
@@ -67,5 +66,5 @@ class Transformer(object):
             raise
         except Exception:
             LOGGER.exception(
-                u"Unexpected error whilst trying to apply transform chain"
+                "Unexpected error whilst trying to apply transform chain"
             )

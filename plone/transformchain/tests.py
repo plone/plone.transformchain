@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from plone.testing.zca import UNIT_TESTING
 from plone.transformchain.interfaces import ITransform
 from plone.transformchain.interfaces import ITransformer
@@ -30,7 +29,7 @@ if HAS_ZSERVER:
     from ZServer.FTPRequest import FTPRequest
 
 
-class FauxPubEvent(object):
+class FauxPubEvent:
 
     def __init__(self, request):
         self.request = request
@@ -44,7 +43,7 @@ class IPublishedMarker(Interface):
     pass
 
 
-class FauxResponse(object):
+class FauxResponse:
 
     def __init__(self, body=''):
         self._body = body
@@ -73,13 +72,13 @@ if HAS_ZSERVER:
         pass
 
 
-class FauxPublished(object):
+class FauxPublished:
     pass
 
 
 @implementer(ITransform)
 @adapter(Interface, Interface)
-class FauxTransformBase(object):
+class FauxTransformBase:
 
     order = 0
 
@@ -112,12 +111,12 @@ class TestTransformChain(unittest.TestCase):
                 return result + b' transformed'
 
             def transformUnicode(self, result, encoding):
-                return result + u' transformed'
+                return result + ' transformed'
 
             def transformIterable(self, result, encoding):
                 return ''.join(result) + ' transformed'
 
-        provideAdapter(Transform1, name=u'test.one')
+        provideAdapter(Transform1, name='test.one')
 
         published = FauxPublished()
         request = FauxRequest(published)
@@ -137,12 +136,12 @@ class TestTransformChain(unittest.TestCase):
                 return result + b' transformed'
 
             def transformUnicode(self, result, encoding):
-                return result + u' transformed'
+                return result + ' transformed'
 
             def transformIterable(self, result, encoding):
                 return ''.join(result) + ' transformed'
 
-        provideAdapter(Transform1, name=u'test.one')
+        provideAdapter(Transform1, name='test.one')
 
         published = FauxPublished()
         request = FauxRequest(published)
@@ -168,7 +167,7 @@ class TestTransformChain(unittest.TestCase):
             def transformBytes(self, result, encoding):
                 return result + b' One'
 
-        provideAdapter(Transform1, name=u'test.one')
+        provideAdapter(Transform1, name='test.one')
 
         published = FauxPublished()
         request = FauxRequest(published)
@@ -183,17 +182,17 @@ class TestTransformChain(unittest.TestCase):
         class Transform1(FauxTransformBase):
 
             def transformUnicode(self, result, encoding):
-                return result + u' One'
+                return result + ' One'
 
-        provideAdapter(Transform1, name=u'test.one')
+        provideAdapter(Transform1, name='test.one')
 
         published = FauxPublished()
         request = FauxRequest(published)
-        result = u'Blah'
+        result = 'Blah'
         encoding = 'utf-8'
 
         new_result = self.t(request, result, encoding)
-        self.assertEqual(u'Blah One', new_result)
+        self.assertEqual('Blah One', new_result)
 
     def test_transform_iterable(self):
 
@@ -202,7 +201,7 @@ class TestTransformChain(unittest.TestCase):
             def transformIterable(self, result, encoding):
                 return result + [' One']
 
-        provideAdapter(Transform1, name=u'test.one')
+        provideAdapter(Transform1, name='test.one')
 
         published = FauxPublished()
         request = FauxRequest(published)
@@ -217,25 +216,25 @@ class TestTransformChain(unittest.TestCase):
         class Transform1(FauxTransformBase):
 
             def transformIterable(self, result, encoding):
-                return u''.join(result) + u' One'
+                return ''.join(result) + ' One'
 
         class Transform2(FauxTransformBase):
 
             order = 1
 
             def transformUnicode(self, result, encoding):
-                return result.encode(encoding) + u' Two'.encode(encoding)
+                return result.encode(encoding) + ' Two'.encode(encoding)
 
         class Transform3(FauxTransformBase):
 
             order = 2
 
             def transformBytes(self, result, encoding):
-                return result.decode(encoding) + u' Three'
+                return result.decode(encoding) + ' Three'
 
-        provideAdapter(Transform1, name=u'test.one')
-        provideAdapter(Transform2, name=u'test.two')
-        provideAdapter(Transform3, name=u'test.three')
+        provideAdapter(Transform1, name='test.one')
+        provideAdapter(Transform2, name='test.two')
+        provideAdapter(Transform3, name='test.three')
 
         published = FauxPublished()
         request = FauxRequest(published)
@@ -243,14 +242,14 @@ class TestTransformChain(unittest.TestCase):
         encoding = 'utf-8'
 
         new_result = self.t(request, result, encoding)
-        self.assertEqual(u'Blah One Two Three', new_result)
+        self.assertEqual('Blah One Two Three', new_result)
 
     def test_abort(self):
 
         class Transform1(FauxTransformBase):
             pass
 
-        provideAdapter(Transform1, name=u'test.one')
+        provideAdapter(Transform1, name='test.one')
 
         published = FauxPublished()
         request = FauxRequest(published)
@@ -268,7 +267,7 @@ class TestTransformChain(unittest.TestCase):
                 return b'One'
 
             def transformUnicode(self, result, encoding):
-                return u'One'
+                return 'One'
 
             def transformIterable(self, result, encoding):
                 return 'One'
@@ -284,14 +283,14 @@ class TestTransformChain(unittest.TestCase):
                 return result + b' three'
 
             def transformUnicode(self, result, encoding):
-                return result + u' three'
+                return result + ' three'
 
             def transformIterable(self, result, encoding):
                 return ''.join(result) + ' three'
 
-        provideAdapter(Transform1, name=u'test.one')
-        provideAdapter(Transform2, name=u'test.two')
-        provideAdapter(Transform3, name=u'test.three')
+        provideAdapter(Transform1, name='test.one')
+        provideAdapter(Transform2, name='test.two')
+        provideAdapter(Transform3, name='test.three')
 
         published = FauxPublished()
         request = FauxRequest(published)
@@ -311,7 +310,7 @@ class TestTransformChain(unittest.TestCase):
                 return result + b' One'
 
             def transformUnicode(self, result, encoding):
-                return result + u' One'
+                return result + ' One'
 
             def transformIterable(self, result, encoding):
                 return ''.join(result) + ' One'
@@ -324,7 +323,7 @@ class TestTransformChain(unittest.TestCase):
                 return result + b' Two'
 
             def transformUnicode(self, result, encoding):
-                return result + u' Two'
+                return result + ' Two'
 
             def transformIterable(self, result, encoding):
                 return ''.join(result) + ' Two'
@@ -337,14 +336,14 @@ class TestTransformChain(unittest.TestCase):
                 return result + b' Three'
 
             def transformUnicode(self, result, encoding):
-                return result + u' Three'
+                return result + ' Three'
 
             def transformIterable(self, result, encoding):
                 return ''.join(result) + ' Three'
 
-        provideAdapter(Transform1, name=u'test.one')
-        provideAdapter(Transform2, name=u'test.two')
-        provideAdapter(Transform3, name=u'test.three')
+        provideAdapter(Transform1, name='test.one')
+        provideAdapter(Transform2, name='test.two')
+        provideAdapter(Transform3, name='test.three')
 
         published = FauxPublished()
         request = FauxRequest(published)
@@ -364,7 +363,7 @@ class TestTransformChain(unittest.TestCase):
                 return result + b' One'
 
             def transformUnicode(self, result, encoding):
-                return result + u' One'
+                return result + ' One'
 
             def transformIterable(self, result, encoding):
                 return ''.join(result) + ' One'
@@ -377,7 +376,7 @@ class TestTransformChain(unittest.TestCase):
                 return result + b' Two'
 
             def transformUnicode(self, result, encoding):
-                return result + u' Two'
+                return result + ' Two'
 
             def transformIterable(self, result, encoding):
                 return ''.join(result) + ' Two'
@@ -392,14 +391,14 @@ class TestTransformChain(unittest.TestCase):
                 return result + b' Three'
 
             def transformUnicode(self, result, encoding):
-                return result + u' Three'
+                return result + ' Three'
 
             def transformIterable(self, result, encoding):
                 return ''.join(result) + ' Three'
 
-        provideAdapter(Transform1, name=u'test.one')
-        provideAdapter(Transform2, name=u'test.two')
-        provideAdapter(Transform3, name=u'test.three')
+        provideAdapter(Transform1, name='test.one')
+        provideAdapter(Transform2, name='test.two')
+        provideAdapter(Transform3, name='test.three')
 
         published = FauxPublished()
         request = FauxRequest(published)
@@ -428,7 +427,7 @@ class TestTransformChain(unittest.TestCase):
                 return result + b' One'
 
             def transformUnicode(self, result, encoding):
-                return result + u' One'
+                return result + ' One'
 
             def transformIterable(self, result, encoding):
                 return ''.join(result) + ' One'
@@ -441,7 +440,7 @@ class TestTransformChain(unittest.TestCase):
                 return result + b' Two'
 
             def transformUnicode(self, result, encoding):
-                return result + u' Two'
+                return result + ' Two'
 
             def transformIterable(self, result, encoding):
                 return ''.join(result) + ' Two'
@@ -456,14 +455,14 @@ class TestTransformChain(unittest.TestCase):
                 return result + b' Three'
 
             def transformUnicode(self, result, encoding):
-                return result + u' Three'
+                return result + ' Three'
 
             def transformIterable(self, result, encoding):
                 return ''.join(result) + ' Three'
 
-        provideAdapter(Transform1, name=u'test.one')
-        provideAdapter(Transform2, name=u'test.two')
-        provideAdapter(Transform3, name=u'test.three')
+        provideAdapter(Transform1, name='test.one')
+        provideAdapter(Transform2, name='test.two')
+        provideAdapter(Transform3, name='test.three')
 
         published = FauxPublished()
         request = FauxRequest(published)
@@ -493,7 +492,7 @@ class TestZPublisherTransforms(unittest.TestCase):
     def test_applyTransform_webdav_port(self):
 
         @implementer(ITransformer)
-        class DoNotCallTransformer(object):
+        class DoNotCallTransformer:
             encoding = None
 
             def __call__(self, request, result, encoding):
@@ -509,7 +508,7 @@ class TestZPublisherTransforms(unittest.TestCase):
 
     def test_applyTransform_webdav_method(self):
         @implementer(ITransformer)
-        class DoNotCallTransformer(object):
+        class DoNotCallTransformer:
             encoding = None
 
             def __call__(self, request, result, encoding):
@@ -526,7 +525,7 @@ class TestZPublisherTransforms(unittest.TestCase):
     def test_applyTransform_webdav_pathinfo(self):
 
         @implementer(ITransformer)
-        class DoNotCallTransformer(object):
+        class DoNotCallTransformer:
             encoding = None
 
             def __call__(self, request, result, encoding):
@@ -548,7 +547,7 @@ class TestZPublisherTransforms(unittest.TestCase):
     def test_applyTransform_default_encoding(self):
 
         @implementer(ITransformer)
-        class EncodingCaptureTransformer(object):
+        class EncodingCaptureTransformer:
             encoding = None
 
             def __call__(self, request, result, encoding):
@@ -565,7 +564,7 @@ class TestZPublisherTransforms(unittest.TestCase):
 
     def test_applyTransform_other_encoding(self):
         @implementer(ITransformer)
-        class EncodingCaptureTransformer(object):
+        class EncodingCaptureTransformer:
             encoding = None
 
             def __call__(self, request, result, encoding):
@@ -583,7 +582,7 @@ class TestZPublisherTransforms(unittest.TestCase):
 
     def test_applyTransform_other_encoding_with_header_missing_space(self):
         @implementer(ITransformer)
-        class EncodingCaptureTransformer(object):
+        class EncodingCaptureTransformer:
             encoding = None
 
             def __call__(self, request, result, encoding):
@@ -601,7 +600,7 @@ class TestZPublisherTransforms(unittest.TestCase):
 
     def test_applyTransform_str(self):
         @implementer(ITransformer)
-        class FauxTransformer(object):
+        class FauxTransformer:
 
             def __call__(self, request, result, encoding):
                 return 'dummystr'
@@ -617,10 +616,10 @@ class TestZPublisherTransforms(unittest.TestCase):
 
     def test_applyTransform_unicode(self):
         @implementer(ITransformer)
-        class FauxTransformer(object):
+        class FauxTransformer:
 
             def __call__(self, request, result, encoding):
-                return u'dummystr'
+                return 'dummystr'
 
         transformer = FauxTransformer()
         provideUtility(transformer)
@@ -630,11 +629,11 @@ class TestZPublisherTransforms(unittest.TestCase):
         applyTransformOnSuccess(FauxPubEvent(request))
 
         # note: the real setBody would encode here
-        self.assertEqual(u'dummystr', request.response.getBody())
+        self.assertEqual('dummystr', request.response.getBody())
 
     def test_applyTransform_iterable(self):
         @implementer(ITransformer)
-        class FauxTransformer(object):
+        class FauxTransformer:
 
             def __call__(self, request, result, encoding):
                 return ['iter', 'one']
@@ -656,7 +655,7 @@ class TestZPublisherTransforms(unittest.TestCase):
                 out.write('foo')
 
             @implementer(ITransformer)
-            class FauxTransformer(object):
+            class FauxTransformer:
 
                 def __call__(self, request, result, encoding):
                     return filestream_iterator(tmp)
@@ -679,11 +678,11 @@ class TestZPublisherTransforms(unittest.TestCase):
 
     def test_applyTransform_str_input_body(self):
         @implementer(ITransformer)
-        class FauxTransformer(object):
+        class FauxTransformer:
 
             def __call__(self, request, result, encoding):
                 assert isinstance(result, list)
-                assert isinstance(result[0], six.binary_type)
+                assert isinstance(result[0], bytes)
                 return 'dummystr'
 
         transformer = FauxTransformer()
@@ -700,21 +699,21 @@ class TestZPublisherTransforms(unittest.TestCase):
 
     def test_applyTransform_unicode_input_body(self):
         @implementer(ITransformer)
-        class FauxTransformer(object):
+        class FauxTransformer:
 
             def __call__(self, request, result, encoding):
                 assert isinstance(result, list)
-                assert isinstance(result[0], six.binary_type)
-                return u'dummystr'
+                assert isinstance(result[0], bytes)
+                return 'dummystr'
 
         transformer = FauxTransformer()
         provideUtility(transformer)
 
         published = FauxPublished()
         request = FauxRequest(published)
-        request.response.setBody(u'<html />')
+        request.response.setBody('<html />')
 
         applyTransformOnSuccess(FauxPubEvent(request))
 
         # note: the real setBody would encode here
-        self.assertEqual(u'dummystr', request.response.getBody())
+        self.assertEqual('dummystr', request.response.getBody())
