@@ -1,21 +1,12 @@
 from plone.transformchain.interfaces import ITransformer
 from zope.component import adapter
 from zope.component import queryUtility
-from zope.interface import Interface
 from ZPublisher.HTTPResponse import default_encoding
+from ZPublisher.interfaces import IPubBeforeAbort
 from ZPublisher.interfaces import IPubBeforeCommit
 from ZPublisher.Iterators import IStreamIterator
 
 import re
-
-
-try:
-    from ZPublisher.interfaces import IPubBeforeAbort
-except ImportError:
-    # old Zope 2.12 or old ZPublisherBackport - this interface won't be
-    # used, most likely, so the effect is that error messages aren't styled.
-    class IPubBeforeAbort(Interface):
-        pass
 
 
 CHARSET_RE = re.compile(
