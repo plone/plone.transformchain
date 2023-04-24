@@ -39,15 +39,11 @@ setup(
     zip_safe=False,
     python_requires=">=3.8",
     extras_require={
-        "repoze": ["repoze.zope2"],
         "test": "plone.testing [zca]",
     },
     install_requires=[
         "setuptools",
-        "zope.interface",
-        "zope.component",
-        "zope.schema",
-        "Zope2>=2.13.23",
+        "Zope",
     ],
     entry_points="""
     """,
