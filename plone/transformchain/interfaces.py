@@ -1,15 +1,9 @@
-# -*- coding: utf-8 -*-
 from zope import schema
 from zope.interface import Attribute
 from zope.interface import Interface
 
 
-try:
-    from repoze.zope2.interfaces import ITransformer as IBaseTransformer
-except ImportError:
-    IBaseTransformer = Interface
-
-DISABLE_TRANSFORM_REQUEST_KEY = 'plone.transformchain.disable'
+DISABLE_TRANSFORM_REQUEST_KEY = "plone.transformchain.disable"
 
 
 class ITransform(Interface):
@@ -25,13 +19,13 @@ class ITransform(Interface):
     positive or negative.
     """
 
-    order = schema.Int(title=u"Order")
+    order = schema.Int(title="Order")
 
     def transformUnicode(result, encoding):
         """Called to allow the transformer to modify the result if the result
-        is a six.text_type string.
+        is text string.
 
-        Return a new six.text_type string, encoded string or iterable.
+        Return a new text string, encoded string or iterable.
 
         Return None to indicate that the response should not be modified.
         """
@@ -40,7 +34,7 @@ class ITransform(Interface):
         """Called to allow the transformer to modify the result if the result
         is an encoded string.
 
-        Return a new six.text_type string, encoded string or iterable.
+        Return a new text string, encoded string or iterable.
 
         Return None to indicate that the response should not be modified.
         """
@@ -49,13 +43,13 @@ class ITransform(Interface):
         """Called to allow the transformer to modify the result if the result
         is an iterable of strings (as per the WSGI specification).
 
-        Return a new six.text_type string, encoded string or iterable.
+        Return a new text string, encoded string or iterable.
 
         Return None to indicate that the response should not be modified.
         """
 
 
-class ITransformer(IBaseTransformer):
+class ITransformer(Interface):
     """Low-level hook. This interface is defined in repoze.zope2, but since
     this package can be used with the classic ZPublisher as well, we redefine
     it here. You probably don't want to use this directly; you want to use
@@ -74,7 +68,7 @@ class ITransformer(IBaseTransformer):
         `encoding` is the default encoding used.
 
         Return the new result iterable, or a string. If a string is returned,
-        the Content-Type header will be updated automatically. If a six.text_type
+        the Content-Type header will be updated automatically. If a text
         string is returned, it will be encoded with the current content
         encoding.
 
@@ -87,32 +81,28 @@ class IBaseTransformEvent(Interface):
 
     Transform events are notified at different points in transformations.
     """
-    request = Attribute('The request being affected')
+
+    request = Attribute("The request being affected")
 
 
 class IBeforeTransformsEvent(IBaseTransformEvent):
-    """Notified before any transforms are started.
-    """
+    """Notified before any transforms are started."""
 
 
 class IAfterTransformsEvent(IBaseTransformEvent):
-    """Notified after all transforms are finished.
-    """
+    """Notified after all transforms are finished."""
 
 
 class IBaseSingleTransformEvent(IBaseTransformEvent):
-    """Base class for a single transformation notification.
-    """
+    """Base class for a single transformation notification."""
 
-    name = Attribute('the name of the transformation')
-    handler = Attribute('the transformation handler')
+    name = Attribute("the name of the transformation")
+    handler = Attribute("the transformation handler")
 
 
 class IBeforeSingleTransformEvent(IBaseSingleTransformEvent):
-    """Notified before a single Transformation is executed.
-    """
+    """Notified before a single Transformation is executed."""
 
 
 class IAfterSingleTransformEvent(IBaseSingleTransformEvent):
-    """Notified after a single Transformation is executed.
-    """
+    """Notified after a single Transformation is executed."""

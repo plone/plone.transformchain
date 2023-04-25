@@ -1,12 +1,8 @@
 <configure
-    i18n_domain="plone.transformchain"
     xmlns="http://namespaces.zope.org/zope"
-    xmlns:zcml="http://namespaces.zope.org/zcml">
-  <!-- For Zope 2.10, we need to backport the relevant events -->
-  <include
-      package="ZPublisherEventsBackport"
-      zcml:condition="installed ZPublisherEventsBackport"
-  />
+    xmlns:zcml="http://namespaces.zope.org/zcml"
+    i18n_domain="plone.transformchain"
+    >
   <!-- Default transformation utility which delegates to ITransform adapters -->
   <utility factory=".transformer.Transformer" />
   <!-- Hooks for ZPublisher -->
