@@ -37,7 +37,6 @@ setup(
         "test": "plone.testing [zca]",
     },
     install_requires=[
-        "setuptools",
         "Zope",
     ],
     entry_points="""
