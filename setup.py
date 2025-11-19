@@ -1,8 +1,7 @@
-from setuptools import find_packages
 from setuptools import setup
 
 
-version = "3.0.3.dev0"
+version = "4.0.0.dev0"
 
 setup(
     name="plone.transformchain",
@@ -18,12 +17,10 @@ setup(
     classifiers=[
         "Development Status :: 5 - Production/Stable",
         "Framework :: Plone",
-        "Framework :: Plone :: 6.0",
+        "Framework :: Plone :: 6.2",
         "Framework :: Plone :: Core",
         "License :: OSI Approved :: BSD License",
         "Programming Language :: Python",
-        "Programming Language :: Python :: 3.8",
-        "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
         "Topic :: Software Development :: Libraries :: Python Modules",
@@ -33,17 +30,13 @@ setup(
     author_email="optilude@gmail.com",
     url="https://pypi.org/project/plone.transformchain",
     license="BSD",
-    packages=find_packages("src"),
-    namespace_packages=["plone"],
-    package_dir={"": "src"},
     include_package_data=True,
     zip_safe=False,
-    python_requires=">=3.8",
+    python_requires=">=3.10",
     extras_require={
         "test": "plone.testing [zca]",
     },
     install_requires=[
-        "setuptools",
         "Zope",
     ],
     entry_points="""
