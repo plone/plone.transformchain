@@ -9,7 +9,6 @@ from zope.interface import implementer
 
 import logging
 
-
 LOGGER = logging.getLogger("plone.transformchain")
 
 
