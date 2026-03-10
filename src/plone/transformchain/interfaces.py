@@ -2,7 +2,6 @@ from zope import schema
 from zope.interface import Attribute
 from zope.interface import Interface
 
-
 DISABLE_TRANSFORM_REQUEST_KEY = "plone.transformchain.disable"
 
 

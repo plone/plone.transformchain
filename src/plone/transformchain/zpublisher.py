@@ -8,7 +8,6 @@ from ZPublisher.Iterators import IStreamIterator
 
 import re
 
-
 CHARSET_RE = re.compile(
     r"(?:application|text)/[-+0-9a-z]+\s*;\s?charset=([-_0-9a-z]+)" r"(?:(?:\s*;)|\Z)",
     re.IGNORECASE,
